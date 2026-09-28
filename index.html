@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Home Energy Manager</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 16px 25px 30px;
+    background: #eaf8f6;
+}
+
+
+.main-header {
+    width: 100%;
+    height: 155px;
+    margin-bottom: 28px;
+    border-radius: 25px;
+    background: linear-gradient(110deg, #166b38, #1fc35b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.header-content { text-align: center; }
+
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+.title-icon { font-size: 43px; }
+
+.title-row h1 { margin: 0; font-size: 40px; color: white; }
+
+.header-content p { margin: 8px 0 0; font-size: 17px; }
+
+
+.container { display: flex; gap: 25px; }
+
+.left { width: 50%; }
+
+.right { width: 50%; }
+
+
+.card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+h2 { color: #146b3a; font-size: 28px; margin-top: 0; }
+
+
+label {
+    display: block;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #111;
+}
+
+input {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 2px solid #dce2e5;
+    border-radius: 15px;
+    font-size: 17px;
+}
+
+input:focus { outline: none; border-color: #18b957; }
+
+
+.green-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #16a94e, #20c35b);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.green-btn:hover { background: #119844; }
+
+
+.dashboard-title { text-align: center; color: #146b3a; font-size: 30px; }
+
+.power-value {
+    text-align: center;
+    font-size: 58px;
+    font-weight: bold;
+    color: #e52525;
+    margin-top: 25px;
+}
+
+.power-label { text-align: center; color: #788391; font-size: 17px; }
+
+
+.progress-container {
+    width: 100%;
+    height: 32px;
+    background: #e1e3e7;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 25px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #18b957;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.percentage { text-align: center; margin-top: 12px; font-weight: bold; font-size: 17px; }
+
+
+.stats { display: flex; gap: 15px; margin-top: 28px; }
+
+.stat {
+    width: 50%;
+    background: #effbf4;
+    padding: 22px;
+    border-radius: 17px;
+    text-align: center;
+}
+
+.stat-value { font-size: 30px; font-weight: bold; color: #146b3a; }
+
+.stat-label { color: #777; margin-top: 7px; font-size: 16px; }
+
+
+.message-box {
+    margin-top: 28px;
+    padding: 25px;
+    border-radius: 18px;
+    border: 2px solid #18aa52;
+    background: #effbf4;
+}
+
+.message-box h2 { color: #146b3a; font-size: 25px; }
+
+.message { font-size: 17px; line-height: 1.7; }
+
+
+.overload { border-color: #ff2222; background: #fff0f0; }
+
+.overload h2 { color: #a82424; }
+
+
+.turn-off-section { margin-top: 25px; }
+
+.turn-off-title { color: #a82424; font-size: 21px; font-weight: bold; margin-bottom: 15px; }
+
+.turn-off-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border: 2px solid #ffb5b5;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
+.turn-off-info { display: flex; flex-direction: column; }
+
+.turn-off-name { font-size: 18px; font-weight: bold; color: #222; }
+
+.turn-off-power { margin-top: 5px; font-size: 15px; color: #666; font-weight: bold; }
+
+.turn-off-btn {
+    background: #e52525;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.turn-off-btn:hover { background: #c91616; }
+
+.safe-list .turn-off-title { color: #146b3a; }
+
+.safe-list .turn-off-item { border-color: #b7e4c7; }
+
+
+.appliance-status { margin-top: 30px; }
+
+.appliance-status-title { color: #146b3a; font-size: 28px; margin-bottom: 18px; }
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px 5px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.status-name { font-size: 18px; color: #173b57; }
+
+.status-on { color: #0aaa4f; font-size: 18px; font-weight: bold; }
+
+.no-appliances { text-align: center; color: #777; padding: 20px; }
+
+
+.alarm-text { color: #e52525; font-weight: bold; text-align: center; margin-top: 12px; }
+
+
+@media(max-width: 900px) {
+    .container { flex-direction: column; }
+    .left, .right { width: 100%; }
+    .title-row h1 { font-size: 30px; }
+    .main-header { height: 140px; }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="main-header">
+    <div class="header-content">
+        <div class="title-row">
+            <span class="title-icon">⚡</span>
+            <h1>Smart Home Energy Manager</h1>
+        </div>
+        <p>Monitor and manage your home appliance power consumption</p>
+    </div>
+</div>
+
+
+<div class="container">
+
+<div class="left">
+
+    <div class="card">
+        <h2>⚙️ Energy Settings</h2>
+        <label>Maximum Power Limit (Watts)</label>
+        <input type="number" id="powerLimit" placeholder="Example: 2000">
+        <button class="green-btn" onclick="setPowerLimit()">Set Power Limit</button>
+    </div>
+
+    <div class="card">
+        <h2>➕ Add Appliance</h2>
+        <label>Appliance Name</label>
+        <input type="text" id="applianceName" placeholder="Example: AC">
+        <label>Power Consumption (Watts)</label>
+        <input type="number" id="appliancePower" placeholder="Example: 800">
+        <button class="green-btn" onclick="addAppliance()">⚡ Turn ON Appliance</button>
+    </div>
+
+</div>
+
+
+<div class="right">
+<div class="card">
+
+    <h2 class="dashboard-title">📊 Energy Dashboard</h2>
+
+    <div class="power-value" id="currentPower">0W</div>
+    <div class="power-label">Current Power Usage</div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="percentage" id="percentage">Set a power limit to monitor usage</div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value" id="limitDisplay">Not Set</div>
+            <div class="stat-label">Maximum Limit</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="remainingPower">-</div>
+            <div class="stat-label">Remaining Power</div>
+        </div>
+    </div>
+
+    <div class="message-box" id="messageBox">
+        <h2 id="statusTitle">✅ POWER USAGE SAFE</h2>
+        <div class="message" id="statusMessage">Set a power limit to start monitoring.</div>
+        <div class="turn-off-section" id="turnOffSection"></div>
+    </div>
+
+    <div class="appliance-status">
+        <h2 class="appliance-status-title">⚡ Appliance Status</h2>
+        <div id="applianceStatusList">
+            <div class="no-appliances">No appliances added yet.</div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+
+   HASH MAP (plain JS object):
+   appliances = { id -> { name, power, number } }
+
+   - Every single unit gets its OWN unique id (key), so 2 fans of the
+     same watts are stored as 2 separate entries and shown one by one.
+   - power  = watts of that one unit
+   - number = fixed number given when the appliance is added
+              (Fan, Fan-2, Fan-3 ...). It NEVER changes, so turning OFF
+              Fan-2 removes only Fan-2 and Fan-3 stays Fan-3.
+   - Add / lookup / delete by id = O(1)
+   ========================= */
+
+let powerLimit = 0;
+
+let appliances = {};     // HASH MAP: id -> { name, power }
+
+let nextId = 1;          // unique id for every unit
+
+let wasOverloaded = false;
+
+let totalUsed = 0;       // total units used so far (never decreases on turn OFF)
+
+
+/* Escape text before putting it inside HTML */
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+
+/* FIND FREE NUMBER - smallest number not used by an appliance that is
+   still ON with the same name (a number freed by TURN OFF is reused).
+   usedNumbers = { number -> true }  (hash map) */
+function findFreeNumber(nameKey) {
+    let usedNumbers = {};
+
+    for (let id in appliances) {
+        let a = appliances[id];
+
+        if (a.name.toLowerCase() === nameKey) {
+            usedNumbers[a.number] = true;
+        }
+    }
+
+    let number = 1;
+    while (usedNumbers.hasOwnProperty(number)) {
+        number++;
+    }
+
+    return number;
+}
+
+
+/* BUILD LABELS - display name of every appliance from its fixed number
+   number 1 -> "AC"  (no number, no hashtag)
+   number 2 -> "AC-2", number 3 -> "AC-3" ...
+   labels = { id -> "AC-2" } */
+function buildLabels() {
+    let labels = {};
+
+    for (let id in appliances) {
+        let a = appliances[id];
+
+        if (a.number === 1) {
+            labels[id] = escapeHtml(a.name);
+        }
+        else {
+            labels[id] = escapeHtml(a.name) + "-" + a.number;
+        }
+    }
+
+    return labels;
+}
+
+
+/* Shared helper: play one tone at given frequency/type/volume/duration, starting at 'delay' seconds from now */
+function playTone(audioContext, freq, type, volume, startDelay, duration) {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.value = freq;
+    oscillator.type = type;
+
+    const startTime = audioContext.currentTime + startDelay;
+
+    gainNode.gain.setValueAtTime(volume, startTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration);
+}
+
+
+/* SOUND 1: entering overload for the first time — rising two-tone alert, LOUD */
+function playBeep() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
+
+        playTone(audioContext, 700, "square", 0.9, 0,    0.18);
+        playTone(audioContext, 1100, "square", 0.9, 0.2, 0.22);
+    }
+    catch (error) {
+        console.log("Beep sound could not play.");
+    }
+}
+
+
+/* SOUND 2: appliance turned OFF — pleasant descending two-tone "ding-dong", LOUD */
+function playRemoveBeep() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
+
+        playTone(audioContext, 950, "sine", 0.8, 0,    0.18);
+        playTone(audioContext, 550, "sine", 0.8, 0.16, 0.28);
+    }
+    catch (error) {
+        console.log("Remove beep could not play.");
+    }
+}
+
+
+/* SOUND 3: adding MORE appliances while already over the limit —
+   urgent, sharp, highest pitch, 3 loud rapid beeps */
+function playStrongOverloadBeep() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
+
+        for (let i = 0; i < 3; i++) {
+            playTone(audioContext, 1400, "sawtooth", 1.0, i * 0.2, 0.16);
+        }
+    }
+    catch (error) {
+        console.log("Strong overload beep could not play.");
+    }
+}
+
+
+function setPowerLimit() {
+    let limit = Number(document.getElementById("powerLimit").value);
+    if (limit <= 0) {
+        alert("Please enter a valid power limit.");
+        return;
+    }
+    powerLimit = limit;
+    updateDashboard();
+}
+
+
+/* ADD APPLIANCE - every unit is stored separately in the hash map */
+function addAppliance() {
+    let name = document.getElementById("applianceName").value.trim();
+    let power = Number(document.getElementById("appliancePower").value);
+
+    if (name === "") {
+        alert("Please enter appliance name.");
+        return;
+    }
+    if (power <= 0) {
+        alert("Please enter valid power consumption.");
+        return;
+    }
+
+    /* Check BEFORE inserting: were we already over the limit? */
+    let alreadyOverloaded =
+        (powerLimit > 0) && (calculatePower() > powerLimit);
+
+    /* HASH MAP INSERT - O(1), every added appliance gets its own id
+       and its own fixed number (AC, AC-2, AC-3 ...) */
+    appliances[nextId] = {
+        name: name,
+        power: power,
+        number: findFreeNumber(name.toLowerCase())
+    };
+
+    nextId++;
+    totalUsed++;
+
+    document.getElementById("applianceName").value = "";
+    document.getElementById("appliancePower").value = "";
+
+    /* If we were ALREADY over the limit and still adding more,
+       play the stronger, more urgent alert every time. */
+    if (alreadyOverloaded) {
+        playStrongOverloadBeep();
+    }
+
+    updateDashboard();
+}
+
+
+/* CALCULATE TOTAL POWER - sum of every unit's power */
+function calculatePower() {
+    let total = 0;
+    for (let id in appliances) {
+        total += appliances[id].power;
+    }
+    return total;
+}
+
+
+/* COUNT UNITS CURRENTLY ON = number of entries in the hash map */
+function countUnitsOn() {
+    return Object.keys(appliances).length;
+}
+
+
+/* TURN OFF ONE UNIT - HASH MAP DELETE by id, O(1) */
+function turnOffAppliance(id) {
+    if (!appliances.hasOwnProperty(id)) return;
+
+    delete appliances[id];
+
+    playRemoveBeep();
+    updateDashboard();
+}
+
+
+function updateDashboard() {
+    let currentPower = calculatePower();
+    document.getElementById("currentPower").innerText = currentPower + "W";
+
+    if (powerLimit === 0) {
+        document.getElementById("limitDisplay").innerText = "Not Set";
+        document.getElementById("remainingPower").innerText = "-";
+        document.getElementById("percentage").innerText = "Set a power limit to monitor usage";
+        document.getElementById("progressBar").style.width = "0%";
+        showSafeMessage();
+        updateApplianceStatus();
+        return;
+    }
+
+    document.getElementById("limitDisplay").innerText = powerLimit + "W";
+
+    let remaining = powerLimit - currentPower;
+    document.getElementById("remainingPower").innerText = Math.max(remaining, 0) + "W";
+
+    let percentage = Math.round((currentPower / powerLimit) * 100);
+    document.getElementById("percentage").innerText = percentage + "% - POWER USAGE";
+
+    let progress = Math.min((currentPower / powerLimit) * 100, 100);
+    document.getElementById("progressBar").style.width = progress + "%";
+
+    if (currentPower > powerLimit) {
+        if (!wasOverloaded) {
+            playBeep();
+        }
+        wasOverloaded = true;
+        showOverloadMessage(currentPower);
+    }
+    else {
+        wasOverloaded = false;
+        showSafeMessage();
+    }
+
+    updateApplianceStatus();
+}
+
+
+function showSafeMessage() {
+    let box = document.getElementById("messageBox");
+    let title = document.getElementById("statusTitle");
+    let message = document.getElementById("statusMessage");
+
+    box.classList.remove("overload");
+    title.innerText = "✅ POWER USAGE SAFE";
+
+    if (powerLimit === 0) {
+        message.innerText = "Set a power limit to start monitoring.";
+    }
+    else {
+        let currentPower = calculatePower();
+        message.innerHTML =
+            "Current power usage: <b>" + currentPower + "W</b> / Limit: <b>" + powerLimit + "W</b><br><br>" +
+            "Your current power usage is within the limit.";
+    }
+
+    /* NEW: TURN OFF options are shown even when power is within the limit */
+    showTurnOffOptions(false);
+}
+
+
+/* Overload box: counts + every appliance unit listed one by one */
+function showOverloadMessage(currentPower) {
+    let box = document.getElementById("messageBox");
+    let title = document.getElementById("statusTitle");
+    let message = document.getElementById("statusMessage");
+
+    box.classList.add("overload");
+
+    let overloaded = currentPower - powerLimit;
+
+    let ids = Object.keys(appliances);
+    let labels = buildLabels();
+    let unitsOn = countUnitsOn();
+
+    /* count badge right next to the red title */
+    title.innerHTML =
+        "🚨 POWER LIMIT EXCEEDED! " +
+        "<span style='font-size:18px;background:#e52525;color:white;padding:4px 12px;border-radius:20px;margin-left:10px;white-space:nowrap;'>" +
+        unitsOn + (unitsOn === 1 ? " appliance" : " appliances") + "</span>";
+
+    /* list of appliances used, one by one */
+    let usedList = "";
+    for (let i = 0; i < ids.length; i++) {
+        let a = appliances[ids[i]];
+        usedList += labels[ids[i]] + " (" + a.power + "W)" +
+                    (i < ids.length - 1 ? ", " : "");
+    }
+
+    message.innerHTML =
+        "Current power usage: <b>" + currentPower + "W</b> / Limit: <b>" + powerLimit + "W</b><br><br>" +
+        "Overloaded by: <b>" + overloaded + "W</b><br><br>" +
+        "🔢 Total appliances used: <b>" + totalUsed + "</b><br>" +
+        "🔌 Currently ON: <b>" + unitsOn + "</b><br>" +
+        "📋 Appliances: <b>" + usedList + "</b><br><br>" +
+        "🔊 Please select an appliance to turn OFF to restore power safety.";
+
+    showTurnOffOptions(true);
+}
+
+
+/* SHOW TURN OFF OPTIONS - always shown (overloaded or not).
+   EVERY unit gets its own row (even same watts) */
+function showTurnOffOptions(isOverload) {
+    let section = document.getElementById("turnOffSection");
+    let ids = Object.keys(appliances);
+    let labels = buildLabels();
+
+    section.className = "turn-off-section" + (isOverload ? "" : " safe-list");
+
+    if (ids.length === 0) {
+        section.innerHTML = "";
+        return;
+    }
+
+    let html = '<div class="turn-off-title">' +
+               (isOverload ? "🔌 Select an appliance to turn OFF" : "🔌 Turn OFF any appliance") +
+               " (" + ids.length + " ON):" +
+               '</div>';
+
+    for (let i = 0; i < ids.length; i++) {
+        let id = ids[i];
+        let a = appliances[id];
+
+        html +=
+            '<div class="turn-off-item">' +
+                '<div class="turn-off-info">' +
+                    '<div class="turn-off-name">' + labels[id] + '</div>' +
+                    '<div class="turn-off-power">' + a.power + 'W • Currently ON</div>' +
+                '</div>' +
+                '<button class="turn-off-btn" onclick="turnOffAppliance(' + id + ')">TURN OFF</button>' +
+            '</div>';
+    }
+
+    section.innerHTML = html;
+}
+
+
+/* APPLIANCE STATUS - every unit listed one by one */
+function updateApplianceStatus() {
+    let list = document.getElementById("applianceStatusList");
+    let ids = Object.keys(appliances);
+    let labels = buildLabels();
+
+    if (ids.length === 0) {
+        list.innerHTML = '<div class="no-appliances">No appliances added yet.</div>';
+        return;
+    }
+
+    let html = "";
+
+    for (let i = 0; i < ids.length; i++) {
+        let a = appliances[ids[i]];
+
+        html +=
+            '<div class="status-item">' +
+                '<div class="status-name">' + labels[ids[i]] + ' (' + a.power + 'W)</div>' +
+                '<div class="status-on">ON</div>' +
+            '</div>';
+    }
+
+    list.innerHTML = html;
+}
+
+
+updateDashboard();
+
+</script>
+
+</body>
+</html>
